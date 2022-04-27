@@ -4,6 +4,6 @@
     {
         public static readonly string JsonPath = @"C:\Users\ryanf\RiderProjects\BasicPassMan\BasicPassMan\PassMan.json";
         protected readonly string EncryptedPath =
-            @"C:\Users\ryanf\RiderProjects\BasicPassMan\BasicPassMan\Encrypted.json;";
+            @"C:\Users\ryanf\RiderProjects\BasicPassMan\BasicPassMan\Encrypted.json";
     }
 }
