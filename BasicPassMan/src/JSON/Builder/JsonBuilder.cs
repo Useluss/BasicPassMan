@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BasicPassMan.UserUtils;
 using Newtonsoft.Json.Linq;
 
@@ -7,21 +6,20 @@ namespace BasicPassMan.JSON.Builder
 {
     public static class JsonBuilder
     {
-        public static JObject CreateJsonUserObject(User cSharpUser)
+        public static JObject CreateJsonUserObject(User user)
         {
             if (new FileInfo(JsonFile.JsonPath).Length != 0) return null;
-            var user = JObject.FromObject(new
+            var jUser = JObject.FromObject(new
             {
                 User = new
                 {
-                    cSharpUser.Username,
-                    cSharpUser.UserEmail,
-                    cSharpUser.Accounts,
-                    cSharpUser.Salt
+                    user.Username,
+                    user.UserEmail,
+                    user.Accounts
                 }
             });
 
-            return user;
+            return jUser;
         }
     }
 }
