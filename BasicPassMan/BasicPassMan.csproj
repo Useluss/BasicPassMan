@@ -6,7 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="src\JSON" />
+      <Folder Include="src\JSON\Reader" />
+      <Folder Include="src\JSON\Writer" />
     </ItemGroup>
 
     <ItemGroup>

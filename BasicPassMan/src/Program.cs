@@ -1,4 +1,5 @@
 ﻿using System;
+using BasicPassMan.JSON.Builder;
 
 namespace BasicPassMan
 {
@@ -6,7 +7,7 @@ namespace BasicPassMan
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var userJson = JsonBuilder.CreateJsonUserObject();
         }
     }
 }
