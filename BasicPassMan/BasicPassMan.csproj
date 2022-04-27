@@ -7,7 +7,6 @@
 
     <ItemGroup>
       <Folder Include="src\JSON\Reader" />
-      <Folder Include="src\JSON\Writer" />
     </ItemGroup>
 
     <ItemGroup>

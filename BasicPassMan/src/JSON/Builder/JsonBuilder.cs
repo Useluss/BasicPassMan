@@ -14,6 +14,7 @@ namespace BasicPassMan.JSON.Builder
             {
                 User = new
                 {
+                    // Temp declarations
                     Username = "Useluss",
                     Accounts = new List<Account>()
                 }
