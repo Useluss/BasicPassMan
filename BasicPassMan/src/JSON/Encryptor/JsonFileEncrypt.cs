@@ -13,14 +13,13 @@ namespace BasicPassMan.JSON.Encryptor
         // Size in bytes
         private const int SaltSize = 32;
         private const int HashSize = 32;
-
         private const int Iterations = 100000; // Number of PBKDF2 iterations
 
         public void Encrypt(byte[] key, ref User user, byte[] password) // Password is temporary
         {
             if (key == null)
             {
-                user.Salt = SaltGenerator();
+                byte[] salt = SaltGenerator();
                 
                 using (var sourceStream = File.OpenRead(JsonPath))
                 using(var destinationStream = File.Create(EncryptedPath))
@@ -28,10 +27,12 @@ namespace BasicPassMan.JSON.Encryptor
                 using (var cryptoTransfer = provider.CreateEncryptor())
                 using (var cryptoStream = new CryptoStream(destinationStream, cryptoTransfer, CryptoStreamMode.Write))
                 {
-                    provider.Key = CreateKey(user.Salt, password);
+                    provider.Key = CreateKey(salt, password);
+                    Env.Load();
                     using (var writer = new StreamWriter((@"C:\Users\ryanf\RiderProjects\BasicPassMan\.env")))
                     {
-                        writer.Write("SECRET_KEY=" + Convert.ToBase64String(provider.Key));
+                        writer.WriteLine("SECRET_KEY=" + Convert.ToBase64String(provider.Key));
+                        writer.WriteLine("SALT=" + Convert.ToBase64String(salt));
                     }
                     
                     destinationStream.Write(provider.IV, 0, provider.IV.Length);
