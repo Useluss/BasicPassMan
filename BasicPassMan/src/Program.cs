@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using BasicPassMan.JSON.Builder;
 using BasicPassMan.JSON.Encryptor;
 using BasicPassMan.JSON.Writer;
 using BasicPassMan.UserUtils;
+using DotNetEnv;
 
 namespace BasicPassMan
 {
@@ -22,10 +24,10 @@ namespace BasicPassMan
             Console.WriteLine("Please enter a password: ");
             var password = Console.ReadLine() + user.Username + user.UserEmail;
             
-            encryptor.Encrypt(null, ref user, Encoding.ASCII.GetBytes(password));
-
-            var userJson = JsonBuilder.CreateJsonUserObject();
+            var userJson = JsonBuilder.CreateJsonUserObject(user);
             JsonWriter.WriteJson(userJson);
+            
+            encryptor.Encrypt(null, ref user, Encoding.ASCII.GetBytes(password));
         }
     }
 }

@@ -1,6 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Security.Cryptography;
+using BasicPassMan.JSON.Writer;
 using BasicPassMan.UserUtils;
+using DotNetEnv;
+using Microsoft.VisualBasic;
 
 namespace BasicPassMan.JSON.Encryptor
 {
@@ -25,8 +29,16 @@ namespace BasicPassMan.JSON.Encryptor
                 using (var cryptoStream = new CryptoStream(destinationStream, cryptoTransfer, CryptoStreamMode.Write))
                 {
                     provider.Key = CreateKey(user.Salt, password);
+                    using (var writer = new StreamWriter((@"C:\Users\ryanf\RiderProjects\BasicPassMan\.env")))
+                    {
+                        writer.Write("SECRET_KEY=" + Convert.ToBase64String(provider.Key));
+                    }
+                    
                     destinationStream.Write(provider.IV, 0, provider.IV.Length);
                     sourceStream.CopyTo(cryptoStream);
+
+                    Env.Load(Path.GetFullPath(@"C:\Users\ryanf\RiderProjects\BasicPassMan\.env"));
+                    Console.WriteLine(Environment.GetEnvironmentVariable("SECRET_KEY"));
                 }
             }
             else
