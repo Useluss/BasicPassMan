@@ -8,7 +8,11 @@ namespace BasicPassMan.JSON.Builder
     {
         public static JObject CreateJsonUserObject(User user)
         {
-            if (new FileInfo(JsonFile.JsonPath).Length != 0) return null;
+            if (new FileInfo(JsonFile.JsonPath).Length != 0)
+            {
+                File.WriteAllText(JsonFile.JsonPath, string.Empty);
+            }
+            
             var jUser = JObject.FromObject(new
             {
                 User = new

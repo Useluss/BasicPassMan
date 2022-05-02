@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 using BasicPassMan.JSON.Writer;
 using BasicPassMan.UserUtils;
 using DotNetEnv;
@@ -29,10 +30,10 @@ namespace BasicPassMan.JSON.Encryptor
                 {
                     provider.Key = CreateKey(salt, password);
                     Env.Load();
-                    using (var writer = new StreamWriter((@"C:\Users\ryanf\RiderProjects\BasicPassMan\.env")))
+                    using (var writer = new StreamWriter(@"C:\Users\ryanf\RiderProjects\BasicPassMan\.env"))
                     {
-                        writer.WriteLine("SECRET_KEY=" + Convert.ToBase64String(provider.Key));
                         writer.WriteLine("SALT=" + Convert.ToBase64String(salt));
+                        writer.WriteLine("SECRET_KEY=" + Convert.ToBase64String(provider.Key));
                     }
                     
                     destinationStream.Write(provider.IV, 0, provider.IV.Length);
@@ -45,6 +46,7 @@ namespace BasicPassMan.JSON.Encryptor
             else
             {
                 // Decrypt the source file and write it to the json file that was originally encrypted.
+                Console.WriteLine(Encoding.ASCII.GetByteCount(Convert.ToBase64String(key)));
                 using (var sourceStream = File.OpenRead(EncryptedPath))
                 using (var destinationStream = File.Create(JsonPath))
                 using (var provider = new AesCryptoServiceProvider())
