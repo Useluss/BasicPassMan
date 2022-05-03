@@ -2,10 +2,8 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using BasicPassMan.JSON.Writer;
 using BasicPassMan.UserUtils;
 using DotNetEnv;
-using Microsoft.VisualBasic;
 
 namespace BasicPassMan.JSON.Encryptor
 {
@@ -21,6 +19,7 @@ namespace BasicPassMan.JSON.Encryptor
             if (key == null)
             {
                 byte[] salt = SaltGenerator();
+                Environment.SetEnvironmentVariable("SALT", Convert.ToBase64String(salt), EnvironmentVariableTarget.User);
                 
                 using (var sourceStream = File.OpenRead(JsonPath))
                 using(var destinationStream = File.Create(EncryptedPath))
@@ -29,17 +28,12 @@ namespace BasicPassMan.JSON.Encryptor
                 using (var cryptoStream = new CryptoStream(destinationStream, cryptoTransfer, CryptoStreamMode.Write))
                 {
                     provider.Key = CreateKey(salt, password);
-                    Env.Load();
-                    using (var writer = new StreamWriter(@"C:\Users\ryanf\RiderProjects\BasicPassMan\.env"))
-                    {
-                        writer.WriteLine("SALT=" + Convert.ToBase64String(salt));
-                        writer.WriteLine("SECRET_KEY=" + Convert.ToBase64String(provider.Key));
-                    }
+                    Environment.SetEnvironmentVariable("SECRET_KEY", Convert.ToBase64String(provider.Key), EnvironmentVariableTarget.User);
                     
                     destinationStream.Write(provider.IV, 0, provider.IV.Length);
                     sourceStream.CopyTo(cryptoStream);
 
-                    Env.Load(Path.GetFullPath(@"C:\Users\ryanf\RiderProjects\BasicPassMan\.env"));
+                    Env.Load();
                     Console.WriteLine(Environment.GetEnvironmentVariable("SECRET_KEY"));
                 }
             }
